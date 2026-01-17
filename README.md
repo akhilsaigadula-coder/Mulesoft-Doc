@@ -34,29 +34,84 @@ Git is a powerful tool for tracking changes in your code, coordinating work amon
 - Pull: To fetch the latest changes from the remote repository and merge them into your local branch.
 - Pull Request (PR): A mechanism to propose changes from your branch to the main branch of a repository. It allows collaborators to review the code before merging
 
+# SSH Setup
+
+### What is SSH
+
+An SSH key is an access credential in the SSH (Secure Shell) protocol used for secure remote login, file transfers, and automated access to network systems. They provide a more secure and convenient alternative to traditional passwords by using public-key cryptography (asymmetric encryption).
+
+
+### How does SSH works
+
+An SSH key always comes in a pair: a public key and a private key. 
+
+Private Key: This key is analogous to a physical key and is kept secret and secure on the user's local machine. It must never be shared and is used to decrypt information sent by the server, proving the user's identity without ever being transmitted over the network. For added security, private keys are often encrypted with a passphrase.
+
+Public Key: This key is like a lock and can be shared with any server you want to access. It is placed in an authorized_keys file on the remote server. The server uses the public key to encrypt a challenge message that only the corresponding private key can decrypt, thus verifying the client's identity.
+
+
+### Setup
+
+Here are the steps that need to be performed to setup SSH with Github.
+
+#### Generating SSH keys
+
+- Open Terminal/Command prompt
+- Run `ssh-keygen -t ed25519 -C "akhilsaigadula@gmail.com"`
+
+This creates a new SSH key, using the provided email as a label.
+
+- Now we're prompted to "Enter a file in which to save the key", you can press Enter to accept the default file location.
+
+- At the prompt, type a secure passphrase.
+
+![ss of Generated sshkeys](SSHKEY.png)
+
 
 # Mulesoft
 
 ## Integration Patterns
 
-### Migration
+### Migration Pattern
 
-This pattern involves moving a large volume of data from a source system to a destination system at a specific point in time.
+This pattern involves moving a large volume of data from a source system to a destination system at a specific point in time.Migrations can handle large volumes of data, process multiple records in batches, and in general, have low failure cases. This makes it a good option for backups and any transfer with lots of data.
 
-### Bi-directional Synchronization
+![Migration](Migration.png)
+
+### Bi-directional Pattern
 
 This pattern combines two datasets in different systems so they behave as a single, consistent logical dataset, allowing changes in either system to be reflected in the other.
 
-### Broadcast
-Data flows from a single source system to one or many destination systems.This ensures that data across multiple systems stays up-to-date.
+Bi-directional sync integration results in optimized performance which maintains data integrity across both synchronized systems. It adds and removes multiple systems that subspecialize in a domain as storage. This integration pattern is best when object representations need to be comprehensive and constant.
 
-### Correlation
+![Bi Directional](BiDirectional.png)
+
+
+### Broadcast Pattern
+Data flows from a single source system to one or many destination systems.This ensures that data across multiple systems stays up-to-date.
+This happens on a near real-time or real-time basis. Put simply, it is one-way synchronization from one to many. One-way sync usually connotes a 1:1 relationship; while the broadcast pattern creates a 1: many relationship.
+
+Broadcast patterns keep data up-to-date between several systems over time. A broadcast Salesforce integration pattern must be super reliable to prevent losing important data in transfer. And as they often have limited human oversight and are usually initiated in mission-critical systems by push notification or are scheduled, reliability becomes even more crucial.
+
+![Broadcast](Broadcast.png)
+
+### Correlation Pattern
 
  It only synchronizes data for items that already exist in both systems (the intersection of the datasets). 
+ However, this only happens if the item transpires in both systems naturally.
 
-### Aggregation
+ This pattern is needed in cases where two different systems want to share data, but only if they both have records that corroborate the same pieces of information or certain items. For example, retail stores might want to correlate customer data across different chains and partners but want to avoid any kind of privacy violations.
+
+ ![Correlation](Correlation.png)
+
+
+### Aggregation Pattern
 
 This pattern involves querying data from multiple systems on demand, merging or processing that data, and presenting it as a single, consolidated response or report. The data is not replicated to a separate database.
+
+Using a Salesforce integration template constructed on an aggregation pattern allows users to request multiple systems when needed and merge data sets to create or store reports into the format of choice. Aggregation contains a custom logic that can be adapted to merge and format data when needed, which can be easily extended to insert data into multiple systems.
+
+![Aggregation](Aggregation.png)
 
 
 ## Fire-and-Forget (Asynchronous Communication)
@@ -98,6 +153,8 @@ APIs are the building blocks of modern software and integration, enabling modula
 ## Three Layered Architecture in Mulesoft 
 
 The Three Layer Architecture is a specific implementation strategy used to organize APIs and integrations based on their function and proximity to source systems or user interfaces.
+
+![Three Layered Architecture](Three_Layered_Architecture.png)
 
 ### System API Layer
 
